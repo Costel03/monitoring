@@ -45,3 +45,10 @@ backend:
 
 gateway:
   enabled: false
+
+# Disable caches - memcached is too heavy for a small cluster
+chunksCache:
+  enabled: false
+
+resultsCache:
+  enabled: false
