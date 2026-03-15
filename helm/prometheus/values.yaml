@@ -4,6 +4,7 @@ prometheus:
     persistentVolume:
       enabled: true
       size: 8Gi
+      storageClass: nfs-client
 
     retention: "15d"
 
@@ -19,6 +20,7 @@ prometheus:
     enabled: true
     persistence:
       size: 2Gi
+      storageClass: nfs-client
 
   pushgateway:
     enabled: false

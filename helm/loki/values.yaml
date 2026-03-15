@@ -27,6 +27,7 @@ loki:
     persistence:
       enabled: true
       size: 10Gi
+      storageClass: nfs-client
 
     resources:
       requests:
