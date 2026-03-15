@@ -1,71 +1,69 @@
-grafana:
+adminPassword: "changeme"
 
-  adminPassword: "changeme"
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: nfs-client
 
-  persistence:
-    enabled: true
-    size: 5Gi
-    storageClass: nfs-client
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
 
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+service:
+  type: ClusterIP
 
-  service:
-    type: ClusterIP
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
+    - name: Loki
+      type: loki
+      url: http://loki.monitoring.svc.cluster.local:3100
+      access: proxy
 
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-      - name: Prometheus
-        type: prometheus
-        url: http://prometheus-server.monitoring.svc.cluster.local
-        access: proxy
-        isDefault: true
-      - name: Loki
-        type: loki
-        url: http://loki.monitoring.svc.cluster.local:3100
-        access: proxy
+# Auto-provision dashboards from grafana.com
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: default
+      orgId: 1
+      folder: ""
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
 
-  # Auto-provision dashboards from grafana.com
-  dashboardProviders:
-    dashboardproviders.yaml:
-      apiVersion: 1
-      providers:
-      - name: default
-        orgId: 1
-        folder: ""
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    # Node Exporter Full - hardware/OS metrics per node
+    node-exporter-full:
+      gnetId: 1860
+      revision: 37
+      datasource: Prometheus
 
-  dashboards:
-    default:
-      # Node Exporter Full - hardware/OS metrics per node
-      node-exporter-full:
-        gnetId: 1860
-        revision: 37
-        datasource: Prometheus
+    # Kubernetes cluster overview - pods, deployments, resources
+    kubernetes-overview:
+      gnetId: 7249
+      revision: 1
+      datasource: Prometheus
 
-      # Kubernetes cluster overview - pods, deployments, resources
-      kubernetes-overview:
-        gnetId: 7249
-        revision: 1
-        datasource: Prometheus
+    # Loki log search & stats
+    loki-logs:
+      gnetId: 13639
+      revision: 2
+      datasource: Loki
 
-      # Loki log search & stats
-      loki-logs:
-        gnetId: 13639
-        revision: 2
-        datasource: Loki
-
-  grafana.ini:
-    server:
-      domain: grafana.local
+grafana.ini:
+  server:
+    domain: grafana.local
