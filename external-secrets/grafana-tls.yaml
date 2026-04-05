@@ -1,13 +1,5 @@
 # TLS certificate for grafana.local — used by the NGINX Ingress.
-# Vault path: secret/tls/grafana   keys: tls.crt  tls.key
-#
-# Generate self-signed cert in WSL:
-#   openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
-#     -keyout /tmp/grafana.key -out /tmp/grafana.crt \
-#     -subj "/CN=grafana.local" \
-#     -addext "subjectAltName=DNS:grafana.local"
-#   cat /tmp/grafana.crt   → paste as tls.crt in Vault
-#   cat /tmp/grafana.key   → paste as tls.key in Vault
+# Vault engine: tls (KV v2)   secret path: grafana   keys: tls.crt, tls.key
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -16,7 +8,7 @@ metadata:
 spec:
   refreshInterval: 24h
   secretStoreRef:
-    name: vault-cluster-backend
+    name: vault-tls
     kind: ClusterSecretStore
   target:
     name: grafana-tls
@@ -26,9 +18,9 @@ spec:
   data:
   - secretKey: tls.crt
     remoteRef:
-      key: tls/grafana
+      key: grafana
       property: tls.crt
   - secretKey: tls.key
     remoteRef:
-      key: tls/grafana
+      key: grafana
       property: tls.key
