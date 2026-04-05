@@ -1,4 +1,6 @@
+# TODO: replace with an ExternalSecret from Vault once the cluster is provisioned
 adminPassword: "changeme"
+adminUser: admin
 
 persistence:
   enabled: true
@@ -15,6 +17,16 @@ resources:
 
 service:
   type: LoadBalancer
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.56.20
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+  - grafana.local
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 
 datasources:
   datasources.yaml:
@@ -67,3 +79,10 @@ dashboards:
 grafana.ini:
   server:
     domain: grafana.local
+    root_url: "%(protocol)s://%(domain)s/"
+  security:
+    disable_gravatar: true
+    cookie_secure: true
+  analytics:
+    reporting_enabled: false
+    check_for_updates: false
