@@ -1,5 +1,9 @@
-# TODO: replace with an ExternalSecret from Vault once the cluster is provisioned
-adminPassword: "changeme"
+# Admin password is managed by ExternalSecret (external-secrets/grafana-admin.yaml)
+# It creates the grafana-admin-secret which grafana reads via admin.existingSecret
+admin:
+  existingSecret: grafana-admin-secret
+  userKey: admin-user
+  passwordKey: admin-password
 adminUser: admin
 
 persistence:
@@ -16,9 +20,7 @@ resources:
     memory: 512Mi
 
 service:
-  type: LoadBalancer
-  annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.56.20
+  type: ClusterIP
 
 ingress:
   enabled: true
