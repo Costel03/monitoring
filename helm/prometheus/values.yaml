@@ -6,12 +6,16 @@ server:
 
   retention: "15d"
 
+  global:
+    scrape_interval: 60s
+    evaluation_interval: 60s
+
   resources:
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 256Mi
     limits:
-      cpu: 500m
+      cpu: 200m
       memory: 1Gi
 
 alertmanager:
