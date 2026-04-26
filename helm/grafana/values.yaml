@@ -44,6 +44,8 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local
       access: proxy
       isDefault: true
+      jsonData:
+        timeInterval: "60s"
     - name: Loki
       type: loki
       url: http://loki.monitoring.svc.cluster.local:3100
